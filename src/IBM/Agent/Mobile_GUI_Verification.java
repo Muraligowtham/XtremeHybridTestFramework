@@ -128,7 +128,7 @@ public class Mobile_GUI_Verification {
 			WebElementInnerTextVerificationnegative();
 		}
 
-		if (ObjType.equalsIgnoreCase("WEBBUTTON") && TargetProperty.equalsIgnoreCase("Visible")) {
+		if (ObjType.equalsIgnoreCase("MobileElement") && TargetProperty.equalsIgnoreCase("Visible")) {
 			WebButtonvisibleVerificationnegative();
 		}
 		if (ObjType.equalsIgnoreCase("WEBBUTTON") && TargetProperty.equalsIgnoreCase("html id")) {
@@ -403,9 +403,14 @@ Boolean a=true;
 				 WebElementHtmlidVerification();
 			 }
 			 
-			 if(ObjType.equalsIgnoreCase("WebElement")&&TargetProperty.equalsIgnoreCase("innerText"))
+			 if(ObjType.equalsIgnoreCase("MobileElement")&&TargetProperty.equalsIgnoreCase("innerText"))
 			 { a=false;
 				 WebElementInnerTextVerification();
+			 }
+			 
+			 if(ObjType.equalsIgnoreCase("MobileElement")&&TargetProperty.equalsIgnoreCase("InnerTextContains"))
+			 { a=false;
+				 WebElementInnerTextContainsVerification();
 			 }
 
 			 if(ObjType.equalsIgnoreCase("WebElement")&&TargetProperty.equalsIgnoreCase("containsText"))
@@ -418,7 +423,7 @@ Boolean a=true;
 			 }
 			 
 
-			 if(ObjType.equalsIgnoreCase("WebElement")&&TargetProperty.equalsIgnoreCase("Visible"))
+			 if(ObjType.equalsIgnoreCase("MobileElement")&&TargetProperty.equalsIgnoreCase("Visible"))
 			 { a=false;
 				 WebElementVisible();
 			}
@@ -634,6 +639,22 @@ Boolean a=true;
 	}
 
 	// tested
+	private void WebElementInnerTextContainsVerification() throws Exception {
+		String text = getElement().getText();
+		if (text != "") {
+			if(text.contains(ExpResult)){
+				System.out.println("Expected"+ExpResult+"  Actual"+text);
+				logEntryPassMessage("verified Webelement Text");
+			} else {
+				System.out.println(text+"-ActualText");
+				logEntryFailMessage("Webelement Text differs");
+			}
+		
+		} 
+
+	}
+
+	
 	private void WebElementInnerTextVerification() throws Exception {
 		String text = getElement().getText();
 		if (text != "") {
@@ -645,7 +666,6 @@ Boolean a=true;
 		}
 
 	}
-
 	private void WebElementContainsTextVerification() throws Exception {
 		String text = getElement().getText();
 		if (text != "") {
@@ -748,26 +768,29 @@ Boolean a=true;
 	}
 
 	private WebElement getElement() throws Exception {
-		if (ses.waitFor(20).elementPresent(By.id(ObjName), ""))
+	
+	
+		if (ses.waitFor(20).mobileElementPresent(By.id(ObjName), ""))
 			return ses.getAndroidDriver().findElement(By.id(ObjName));
 
-		else if (ses.waitFor(5).elementPresent(By.name(ObjName), ""))
+		else if (ses.waitFor(5).mobileElementPresent(By.name(ObjName), ""))
 			return ses.getAndroidDriver().findElement(By.name(ObjName));
 
-		else if (ses.waitFor(5).elementPresent(By.xpath(ObjName), ""))
+		else if (ses.waitFor(5).mobileElementPresent(By.xpath(ObjName), ""))
 			return ses.getAndroidDriver().findElement(By.xpath(ObjName));
 
-		else if (ses.waitFor(5).elementPresent(By.xpath("//*[contains(text(),'" + ObjName + "')]"), ""))
-			return ses.getAndroidDriver().findElement(By.xpath("//*[contains(text(),'" + ObjName + "')]"));
+		else if (ses.waitFor(5).mobileElementPresent(By.xpath("//*[contains(text(),'" + ObjName + "')]"), ""))
+			
+			return ses.getAndroidDriver().findElement(By.xpath("//*[contains(text(),'Teeet')]"));
 
-		else if (ses.waitFor(5).elementPresent(By.xpath("//*[.='" + ObjName + "']"), ""))
+		else if (ses.waitFor(5).mobileElementPresent(By.xpath("//*[.='" + ObjName + "']"), ""))
 			return ses.getAndroidDriver().findElement(By.xpath("//*[.='" + ObjName + "']"));
 
-		else if (ses.waitFor(5).elementPresent(By.xpath("//*[@class='" + ObjName + "']"), ""))
+		else if (ses.waitFor(5).mobileElementPresent(By.xpath("//*[@class='" + ObjName + "']"), ""))
 			return ses.getAndroidDriver().findElement(By.xpath("//*[@class='" + ObjName + "']"));
 
 		else
-			throw new Exception("Element identification Errror with the GUI Verfification");
+			throw new Exception("Element identification Error with the GUI Verfification");
 	}
 
 	private void logEntryPassMessage(String Message) throws Exception {

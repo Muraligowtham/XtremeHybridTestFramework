@@ -32,7 +32,7 @@ public class Agent_Perform_ActionOn_WebObject {
 	}
 
 	private String[] getTestData(String testdata, int Count) {
-		System.out.println(testdata);
+		//System.out.println(testdata);
 
 		String[] arraytestdata = null;
 		if (ses.getVariable(testdata).equals("")) {
@@ -52,10 +52,17 @@ public class Agent_Perform_ActionOn_WebObject {
 	}
 
 	public void Perform_ActionOn_WebObject(int Count) throws Exception {
+		
 
 		String[] PERFORM_SelectListItem = getTestData("Mobile_PERFORM_Data", Count);
 
 		String[] ObjName = getTestData("Mobile_PERFORM_ObjName", Count);
+		if (value[Count].equalsIgnoreCase("SWIPE")) {
+			int loop = Integer.parseInt(PERFORM_SelectListItem[Count]);
+			for (int i = 1; i <= loop; i++) {
+
+				ses.perform().swipeUp(1000);
+			}
 
 		if (value[Count].equalsIgnoreCase("SwitchFrame")) {
 
@@ -120,9 +127,11 @@ public class Agent_Perform_ActionOn_WebObject {
 				} else {
 					ses.perform().JS_Click(element);
 				}
-			}
+			} 
+		
 
-		} else if (value[Count].equalsIgnoreCase("WEBBUTTON")) {
+			} else if (value[Count].equalsIgnoreCase("WEBBUTTON")) {
+			}
 			try {
 				if (ses.waitFor(5).MobileElementClickable(By.id(ObjName[Count]), ""))
 					ses.perform().JS_Click(By.id(ObjName[Count]));
@@ -153,19 +162,7 @@ public class Agent_Perform_ActionOn_WebObject {
 				ses.perform().JS_Click(By.xpath(ObjName[Count]));
 
 		} else if (value[Count].equalsIgnoreCase("Click")) {
-			if (ses.waitFor(5).MobileElementClickable(By.xpath(ObjName[Count]), "")) {
-				ses.perform().JS_Click(By.xpath(ObjName[Count]));
-				Thread.sleep(5000);
-			}
-
-			else if (ses.waitFor(5).MobileElementClickable(By.name(ObjName[Count]), ""))
-				ses.perform().JS_Click(By.name(ObjName[Count]));
-
-			else if (ses.waitFor(20).MobileElementClickable(By.id(ObjName[Count]), ""))
-				ses.perform().JS_Click(By.id(ObjName[Count]));
-
-			else
-				ses.perform().JS_Click(By.xpath("//*[.='" + ObjName[Count] + "']"));
+			getElement(ObjName[Count]).click();
 
 		} else if (value[Count].equalsIgnoreCase("WebCheckBox")) {
 
@@ -208,7 +205,7 @@ public class Agent_Perform_ActionOn_WebObject {
 
 	private WebElement getElement(String ObjName) throws Exception {
 		try {
-
+Thread.sleep(5000);
 			ses.getDriver().switchTo().defaultContent();
 			if (ses.waitFor(5).MobileElementClickable(By.id(ObjName), ""))
 				return ses.getAndroidDriver().findElement(By.id(ObjName));

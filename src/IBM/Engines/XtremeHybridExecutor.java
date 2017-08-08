@@ -30,7 +30,7 @@ import log.LogEntry;
 
 public class XtremeHybridExecutor {  
 	static ArrayList<Integer> testcases=new ArrayList<Integer>();
-	
+	public static boolean singleExecutionMetaData=true;
 	static int Threadpool=2;
 	public static HashMap<String,String> devicesStatus=new HashMap<String,String>();
 	public static HashMap<String, String> devicesMapwithAndroidID=new HashMap<String, String>();

@@ -32,7 +32,7 @@ public class Perform_ActionOn_WebObject {
 	}
 
 	private String[] getTestData(String testdata, int Count) {
-		System.out.println(testdata);
+		// System.out.println(testdata);
 
 		String[] arraytestdata = null;
 		if (ses.getVariable(testdata).equals("")) {
@@ -53,38 +53,44 @@ public class Perform_ActionOn_WebObject {
 
 	public void Perform_ActionOn_WebObject(int Count) throws Exception {
 
-		String[] PERFORM_SelectListItem = getTestData("PERFORM_Data",Count);
-	
-
+		String[] PERFORM_SelectListItem = getTestData("PERFORM_Data", Count);
 		String[] ObjName = getTestData("PERFORM_ObjName", Count);
-		
+
 		if (value[Count].equalsIgnoreCase("SwitchFrame")) {
-Thread.sleep(4000);
+
+			if (PERFORM_SelectListItem[Count].equals("Default")) {
+				ses.getDriver().switchTo().defaultContent();
+			}
+			else if (PERFORM_SelectListItem[Count].equals("locateActionMapContainer")) {
+				ses.getDriver().switchTo().defaultContent();
+				ses.getDriver().switchTo().frame("locateActionMapContainer");
+			}
 			
-			ses.getDriver().switchTo().frame("Content");
-			
-		} 
-		
-		
+			else {
+				Thread.sleep(4000);
+				ses.getDriver().switchTo().frame("Content");
+			}
+
+		}
 
 		if (value[Count].equalsIgnoreCase("WebEdit")) {
-			
+
 			getElement(ObjName[Count]).sendKeys(PERFORM_SelectListItem[Count]);
-			
+
 		} else if (value[Count].equalsIgnoreCase("MOUSEOVER"))
 
 		{
 
 			WebElement mouseover = ses.getDriver().findElement(By.id(ObjName[Count]));
-			
-				if (ses.getDriver().findElement(By.id(ObjName[Count])).isDisplayed()) {
-					ses.perform().mouseOverElement(mouseover);
 
-				}
-			
+			if (ses.getDriver().findElement(By.id(ObjName[Count])).isDisplayed()) {
+				ses.perform().mouseOverElement(mouseover);
+
+			}
+
 		} else if (value[Count].equalsIgnoreCase("WebList")) {
 
-			String[] Element = getTestData("PERFORM_SelectListItem", Count);
+			String[] Element = getTestData("PERFORM_Data", Count);
 			try {
 				WebElement selectedElement = ses.getDriver().findElement(By.name(ObjName[Count]));
 				org.openqa.selenium.support.ui.Select elementValue = new org.openqa.selenium.support.ui.Select(
@@ -128,37 +134,24 @@ Thread.sleep(4000);
 
 		} else if (value[Count].equalsIgnoreCase("WEBBUTTON")) {
 			try {
-				if (ses.waitFor(5).elementPresent(By.id(ObjName[Count]), ""))
-					ses.perform().JS_Click(By.id(ObjName[Count]));
-
-				else if (ses.waitFor(2).elementPresent(By.name(ObjName[Count]), ""))
-					ses.perform().JS_Click(By.name(ObjName[Count]));
-
-				else if (ses.waitFor().elementPresent(By.xpath(ObjName[Count]), ""))
-					ses.perform().JS_Click(By.xpath(ObjName[Count]));
-
-				else
-					ses.perform().JS_Click(By.xpath("//*[.='" + ObjName[Count] + "']"));
+				System.out.println();
+				getElement(ObjName[Count]).click();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 
 		else if (value[Count].equalsIgnoreCase("LINK")) {
-		
-				
-				if (ses.waitFor(10).elementPresent(By.id(ObjName[Count]), ""))
 
-					ses.perform().JS_Click(By.id(ObjName[Count]));
+			if (ses.waitFor(10).elementPresent(By.id(ObjName[Count]), ""))
 
-				else if (ses.waitFor(5).elementPresent(By.name(ObjName[Count]), ""))
-					ses.perform().JS_Click(By.name(ObjName[Count]));
+				ses.perform().JS_Click(By.id(ObjName[Count]));
 
-				else if (ses.waitFor(5).elementPresent(By.xpath(ObjName[Count]), ""))
-					ses.perform().JS_Click(By.xpath(ObjName[Count]));
+			else if (ses.waitFor(5).elementPresent(By.name(ObjName[Count]), ""))
+				ses.perform().JS_Click(By.name(ObjName[Count]));
 
-				
-			
+			else if (ses.waitFor(5).elementPresent(By.xpath(ObjName[Count]), ""))
+				ses.perform().JS_Click(By.xpath(ObjName[Count]));
 
 		} else if (value[Count].equalsIgnoreCase("Click")) {
 			if (ses.waitFor(5).elementPresent(By.xpath(ObjName[Count]), "")) {
@@ -212,45 +205,12 @@ Thread.sleep(4000);
 
 		}
 
-	
-	
-	
-	
-	
 	}
-	
+
 	private WebElement getElement(String ObjName) throws Exception {
-		try{		
-		
-		ses.getDriver().switchTo().defaultContent();
-		if (ses.waitFor(10).elementPresent(By.id(ObjName), ""))
-			return ses.getDriver().findElement(By.id(ObjName));
+		try {
 
-		else if (ses.waitFor(1).elementPresent(By.name(ObjName), ""))
-			return ses.getDriver().findElement(By.name(ObjName));
-
-		else if (ses.waitFor(1).elementPresent(By.xpath(ObjName), ""))
-			return ses.getDriver().findElement(By.xpath(ObjName));
-
-		else if (ses.waitFor().elementPresent(By.xpath("//*[contains(text(),'" + ObjName + "')]"), ""))
-			return ses.getDriver().findElement(By.xpath("//*[contains(text(),'" + ObjName + "')]"));
-
-		else if (ses.waitFor().elementPresent(By.xpath("//p[contains(text(),'" + ObjName + "')]"), ""))
-			return ses.getDriver().findElement(By.xpath("//p[contains(text(),'" + ObjName + "')]"));
-
-		else if (ses.waitFor().elementPresent(By.xpath("//*[.='" + ObjName + "']"), ""))
-			return ses.getDriver().findElement(By.xpath("//*[.='" + ObjName + "']"));
-
-		else if (ses.waitFor().elementPresent(By.xpath("//*[@class='" + ObjName + "']"), ""))
-			return ses.getDriver().findElement(By.xpath("//*[@class='" + ObjName + "']"));
-
-		else
-			throw new Exception("Element identification Error at Perform Action -->"+ObjName+"Switching Frame");}
-		
-		catch(Exception E){
-			
-			
-			ses.getDriver().switchTo().frame("Content");
+			ses.getDriver().switchTo().defaultContent();
 			if (ses.waitFor(10).elementPresent(By.id(ObjName), ""))
 				return ses.getDriver().findElement(By.id(ObjName));
 
@@ -273,7 +233,38 @@ Thread.sleep(4000);
 				return ses.getDriver().findElement(By.xpath("//*[@class='" + ObjName + "']"));
 
 			else
-				throw new Exception("Element identification Error at Perform Action -->"+ObjName);
+				throw new Exception("Element identification Error at Perform Action -->" + ObjName + "Switching Frame");
+		}
+
+		catch (Exception E) {
+			Thread.sleep(3000);
+
+			ses.getDriver().switchTo().frame("Content");
+			
+			if (ses.waitFor(10).elementPresent(By.id(ObjName), ""))
+				return ses.getDriver().findElement(By.id(ObjName));
+
+			else if (ses.waitFor(1).elementPresent(By.name(ObjName), ""))
+				return ses.getDriver().findElement(By.name(ObjName));
+
+			else if (ses.waitFor(1).elementPresent(By.xpath(ObjName), ""))
+				{ses.waitFor(10).elementClickable(By.xpath(ObjName));
+				return ses.getDriver().findElement(By.xpath(ObjName));}
+
+			else if (ses.waitFor().elementPresent(By.xpath("//*[contains(text(),'" + ObjName + "')]"), ""))
+				return ses.getDriver().findElement(By.xpath("//*[contains(text(),'" + ObjName + "')]"));
+
+			else if (ses.waitFor().elementPresent(By.xpath("//p[contains(text(),'" + ObjName + "')]"), ""))
+				return ses.getDriver().findElement(By.xpath("//p[contains(text(),'" + ObjName + "')]"));
+
+			else if (ses.waitFor().elementPresent(By.xpath("//*[.='" + ObjName + "']"), ""))
+				return ses.getDriver().findElement(By.xpath("//*[.='" + ObjName + "']"));
+
+			else if (ses.waitFor().elementPresent(By.xpath("//*[@class='" + ObjName + "']"), ""))
+				return ses.getDriver().findElement(By.xpath("//*[@class='" + ObjName + "']"));
+
+			else
+				throw new Exception("Element identification Error at Perform Action -->" + ObjName);
 		}
 	}
 

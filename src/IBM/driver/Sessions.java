@@ -39,6 +39,7 @@ public class Sessions {
 			 private static  AppiumDriverLocalService service;
 	String testid;
 	
+	
 	SessionData1 data1;
 	 public WaitForAdvanced wait;
 	 
@@ -61,17 +62,22 @@ public class Sessions {
 	}
 
 	public  void setAndroidDriver(String Device) throws MalformedURLException
-	{   
-		allocateDevice();
+	{  
+		
+		
+		
+		if(!getVariable("ExecuteSingleTestcase").equalsIgnoreCase("Yes") && getVariable("isAllocated").equalsIgnoreCase("No")){
+		allocateDevice();}
+	    if(deviceId==null){allocateDevice();}
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability("VERSION", "6.0.1");
-		capabilities.setCapability(MobileCapabilityType.DEVICE_NAME,deviceId);
+		capabilities.setCapability(MobileCapabilityType.DEVICE_NAME,getVariable("AndroidExecution"));
 		capabilities.setCapability(MobileCapabilityType.PLATFORM_NAME, "Android");
 		capabilities.setCapability(MobileCapabilityType.NO_RESET, "true");
-		capabilities.setCapability(MobileCapabilityType.UDID, deviceId);
+		capabilities.setCapability(MobileCapabilityType.UDID, getVariable("AndroidExecution"));
 		capabilities.setCapability("appPackage", "com.fiberlink.maas360.android.control");
 		capabilities.setCapability("appActivity", ".ui.SplashActivity");
-		
+		System.out.println("------------->Executing Testcase "+getVariable("AndroidExecution")+" in "+deviceId);
 	
 		AndroidDriver = new AndroidDriver<MobileElement>(new URL("http://localhost:4444/wd/hub/"), capabilities);
 		
@@ -132,7 +138,7 @@ public class Sessions {
 	
     public Perform perform()
     {
-    	return new Perform(driver);
+    	return new Perform(driver,AndroidDriver);
     }
 	
 	
@@ -159,6 +165,7 @@ public class Sessions {
 	        {
 	        	 deviceId=DeviceID;	        	
 	        	XtremeHybridExecutor.devicesStatus.put(deviceId, "Yes");
+	        	System.out.println("====>Allocating Testcase "+testid+" in "+deviceId);
 	        	setVariable("AndroidExecution", deviceId);
 	        	setVariable("isAllocated", "Yes");
 	        	break;

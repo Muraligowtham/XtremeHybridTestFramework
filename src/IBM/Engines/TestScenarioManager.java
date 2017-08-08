@@ -14,6 +14,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 
 import IBM.Pages.CreateUser;
+import IBM.Pages.DeviceActions;
 import IBM.Pages.FilterTheAgent;
 import IBM.Pages.GUI_Verification;
 import IBM.Agent.Agent_Perform_ActionOn_WebObject;
@@ -24,6 +25,7 @@ import IBM.Agent.Mobile_GUI_Verification;
 import IBM.Pages.Login;
 import IBM.Pages.Navigation;
 import IBM.Pages.Perform_ActionOn_WebObject;
+import IBM.Pages.Security_Policy;
 import IBM.driver.*;
 import InbuitMethods.ClickCodes;
 
@@ -31,7 +33,6 @@ public class TestScenarioManager {
 
 	String SessionID = "";
 	private Sessions ses;
-
 
 	public TestScenarioManager(String sessionID) {
 
@@ -78,19 +79,21 @@ public class TestScenarioManager {
 				GUI_Verification verify = new GUI_Verification(ID, Count);
 				verify.GUI_Verification(Count);
 
-			}else if (ses.getVariable("currentstep").equalsIgnoreCase("MobileGUIVerification")) {
+			} else if (ses.getVariable("currentstep").equalsIgnoreCase("MobileGUIVerification")) {
 				Mobile_GUI_Verification verify = new Mobile_GUI_Verification(ID, Count);
 				verify.GUI_Verification(Count);
 
-			}
-			else if (ses.getVariable("currentstep").equalsIgnoreCase("PerformActionsOnWebelements")) {
-
+			} else if (ses.getVariable("currentstep").equalsIgnoreCase("PerformActionsOnWebelements")) {
 				Perform_ActionOn_WebObject perform = new Perform_ActionOn_WebObject(ID, Count);
 				perform.Perform_ActionOn_WebObject(Count);
 			} else if (ses.getVariable("currentstep").equalsIgnoreCase("PerformActionOnMobileElement")) {
 
 				Agent_Perform_ActionOn_WebObject perform = new Agent_Perform_ActionOn_WebObject(ID, Count);
 				perform.Perform_ActionOn_WebObject(Count);
+			} else if (ses.getVariable("currentstep").equalsIgnoreCase("DeviceActions")) {
+				DeviceActions actions = new DeviceActions(ID);
+				actions.actions(Count);
+
 			}
 
 			else if (ses.getVariable("currentstep").equalsIgnoreCase("WAIT")) {
@@ -110,6 +113,10 @@ public class TestScenarioManager {
 				HomePageActions action = new HomePageActions(ID);
 				action.HomeActions(Count);
 
+			} else if (ses.getVariable("currentstep").equalsIgnoreCase("CreatePolicy")) {
+				Security_Policy policy = new Security_Policy(ID);
+				policy.CreatePolicy(Count);
+
 			}
 
 			else if (ses.getVariable("currentstep").equalsIgnoreCase("FilterTheAgent")) {
@@ -126,6 +133,7 @@ public class TestScenarioManager {
 			ses.setVariable("Status", "Fail");
 			ExecutionInstance.addStepEntry(ses, e.getMessage(), ses.getVariable("Status"));
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 
 	}

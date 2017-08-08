@@ -73,7 +73,27 @@ private WebDriver driver;
 		}
 		
 	}
-	
+	public Boolean mobileElementPresent(By locator,String SomeInfo)
+	{
+		try{
+			WebElement element = null;
+			WebDriverWait wait = new WebDriverWait(androidDriver, milli);
+			element = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+			System.out.println(element.getSize());
+			if(element.isDisplayed()){
+				return true;
+			}else{
+				return false;
+			}}
+		catch(Exception h){
+
+			//			captureScreenLable(driver);
+			//			driver.close();
+			//			driver.quit();
+			return false;
+		}
+		
+	}
 	public Boolean elementClickable(By locator,String a)
 	{
 		try{

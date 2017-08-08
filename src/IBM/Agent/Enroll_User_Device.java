@@ -70,7 +70,7 @@ public class Enroll_User_Device {
 				.findElement(By
 						.xpath("//*[@resource-id='com.fiberlink.maas360.android.control:id/registrationContinue']|//android.widget.Button[@text='Continue']"))
 				.click();
-		Thread.sleep(20000);
+		Thread.sleep(30000);
 		// ses.getAndroidDriver().hideKeyboard();
 		ses.waitFor(100000).MobileElementClickable(By.xpath("//*[@resource-id='com.android.settings:id/action_button']"), "");
 		ses.getAndroidDriver().findElement(By.xpath("//*[@resource-id='com.android.settings:id/action_button']"))

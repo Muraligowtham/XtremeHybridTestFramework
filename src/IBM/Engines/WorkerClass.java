@@ -98,12 +98,17 @@ public class WorkerClass implements Runnable {
 			String[] cases=DependentCases.split(";");
 			for(int i=0;i<cases.length;i++)
 			{
-				
+				if(ses.getTestData("ExecuteSingleTestcase").equalsIgnoreCase("yes")){
+					
+					break;
+					
+					
+				}
 				if(XtremeHybridExecutor.CaseStatus.get(cases[i]).equals(""))
 				
 				{
 					while(true){
-						Thread.sleep(60000);
+						Thread.sleep(30000);
 						if(XtremeHybridExecutor.CaseStatus.get(cases[i]).equalsIgnoreCase("pass"))
 						{
 							break;
@@ -250,7 +255,7 @@ public class WorkerClass implements Runnable {
 		ses.setVariable("Status", "");
 		ses.setVariable("InitiateNew", "No");
 		ses.setDriver();
-		
+		ses.setVariable("isAllocated", "");
 		
 		
 		String a = ses.getVariable("TestScenario");
